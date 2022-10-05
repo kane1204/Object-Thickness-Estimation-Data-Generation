@@ -1,0 +1,20 @@
+1.
+conda create -n projectv2 python=3.9
+2.
+conda activate projectv2
+3.A (CPUONLY)
+conda install pytorch torchvision torchaudio cpuonly -c pytorch
+3.B (CUDA)
+conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch
+4.
+conda install -c fvcore -c iopath -c conda-forge fvcore iopath
+5. Conda install of usefull tools
+conda install jupyter scikit-image matplotlib imageio plotly
+6.
+pip install opencv-python
+7. Install linting tools
+pip install black usort flake8 flake8-bugbear flake8-comprehensions
+8.
+pip install "git+https://github.com/facebookresearch/pytorch3d.git@stable"
+9.
+Dunno yet
