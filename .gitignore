@@ -3,3 +3,4 @@ cub-1.10.0/*
 utils/__pycache__/*
 .vscode/*
 __pycache__/
+result/*
