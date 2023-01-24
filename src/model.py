@@ -3,6 +3,9 @@ import os
 class Model:
     def __init__(self, model_path):
         self.model_path = model_path
+        self.model_id = model_path.split("\\")[-1]
+        self.model_type = model_path.split("\\")[-2]
+
         self.obj_path = model_path + "\\model.obj"
         self.mtl_path = model_path + "\\model.mtl"
         # Append all textures to a list within image folder
@@ -34,3 +37,6 @@ class Model:
             return None
         else:
             return self.textures[index]
+    def __str__(self) -> str:
+        # Return the model path as well as id and type
+        return f"Model Path: {self.model_path} Model ID: {self.model_id} Model Type: {self.model_type}"
