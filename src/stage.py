@@ -2,7 +2,7 @@
 import tqdm
 import pandas as pd
 
-from scene import Scene
+from src.scene import Scene
 
 class Stage:
     def __init__(self, models, no_of_frames) -> None:
@@ -10,13 +10,16 @@ class Stage:
         self.no_of_frames = no_of_frames
         self.data_frame = pd.DataFrame()
         self.image_res = 256
+        self.scenes = []
 
     def generate_scene(self, model):
         '''Generate a scene with a number of frames and saves frames to the data frame'''
         scene = Scene(model, self.no_of_frames, self.image_res)
-        scene.generate_samples()
+        scene.generate_frames()
         self.data_frame = self.data_frame.append(scene.frames)
-        del scene
+        # Only append for testing could be memory intensive
+        self.scenes.append(scene)
+        # del scene
 
     def generate_scenes(self):
         '''Generate for each model a scene with a number of frames'''

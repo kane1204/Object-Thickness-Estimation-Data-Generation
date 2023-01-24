@@ -25,4 +25,6 @@ class ModelLoader:
     def get_model_paths_by_catagory_and_model(self, catagory, model):
         return self.model_paths[catagory][model]
 
+    def get_models(self, catagory):
+        return self.model_paths[catagory]
 

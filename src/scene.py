@@ -1,10 +1,11 @@
 #  Create a scene class that has a model and a list of samples
 import random
-from model import Model 
+from src.model import Model
+from src.frame import Frame
 import pyvista as pv
 import numpy as np
 from math import dist
-from frame import Frame
+
 
 pv.global_theme.background = (135, 206, 235)
 pv.global_theme.smooth_shading = True
@@ -20,16 +21,13 @@ class Scene:
         self.resolution = res
         self.show_edges = False
 
-    def generate_scene(self):
-        '''Generate frames for the scene'''
-        for i in range(self.no_of_frames):
-            self.generate_frames()
-    
     def generate_frames(self):
         '''Generate a number of frames for the scene'''
         obj_mesh = pv.read(self.model.obj_path)
-        if self.model.texture_path is not None:
-            obj_texture = pv.read_texture(self.model.texture_path)
+        print(self.model)
+        tex_path = self.model.get_texture(0)
+        if tex_path is not None:
+            obj_texture = pv.read_texture(tex_path)
         base_mesh = self.createBaseMesh(obj_mesh)
         obj_mesh.rotate_vector(vector=(0, 1, 0), angle=self.model_rotation, inplace=True)
 
