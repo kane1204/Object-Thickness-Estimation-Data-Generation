@@ -24,7 +24,7 @@ class Scene:
     def generate_frames(self):
         '''Generate a number of frames for the scene'''
         obj_mesh = pv.read(self.model.obj_path)
-        print(self.model)
+        # print(self.model)
         tex_path = self.model.get_texture(0)
         if tex_path is not None:
             obj_texture = pv.read_texture(tex_path)
@@ -84,7 +84,13 @@ class Scene:
         # Find the first element in pts that is differnt from pts[0] and return that point onelin
         if len(pts) > 2:
             points = np.array(pts)
-            idx = np.where(np.isclose(points, points[0])  != [True, True, True])[0][1]
+            # Bug here with the idx bit
+            # print(points.shape)
+            check = np.where(np.isclose(points, points[0], )  != [True, True, True])
+            # print(len(check[0])<2)
+            if len(check[0]) < 2:
+                return None, None
+            idx = check[0][1]
             return pts[0], pts[idx]
         elif len(pts) == 2:
             return pts[0], pts[1]
