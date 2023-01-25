@@ -58,11 +58,11 @@ class Scene:
 
             pl.screenshot()
             depth_img = pl.get_image_depth(fill_value=0)
-            _ = pl.add_mesh(base_mesh,color='green')
+            back_mesh = pl.add_mesh(base_mesh,color='green')
             pl.ren_win.SetOffScreenRendering(5)
-            img = pl.screenshot("result/moomoo.png",transparent_background=True, 
+            img = pl.screenshot(transparent_background=True, 
                                 window_size=[self.resolution,int(self.resolution*pl.window_size[1]/pl.window_size[0])])
-
+            pl.remove_actor(back_mesh)
             # Get the thickness map
             thicc_map = np.zeros((self.resolution*self.resolution))
             for i in range(len(end_ray_pts.points)):
