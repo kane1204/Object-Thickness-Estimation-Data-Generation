@@ -5,7 +5,7 @@ from src.frame import Frame
 import pyvista as pv
 import numpy as np
 from math import dist
-
+import tetgen
 
 pv.global_theme.background = (135, 206, 235)
 pv.global_theme.smooth_shading = True
@@ -23,7 +23,12 @@ class Scene:
 
     def generate_frames(self):
         '''Generate a number of frames for the scene'''
+        
         obj_mesh = pv.read(self.model.obj_path)
+
+        # tet = tetgen.TetGen(obj_mesh)
+        # tet.tetrahedralize(order=1, mindihedral=20, minratio=1.5)
+        # obj_mesh = tet.mesh
         # print(self.model)
         tex_path = self.model.get_texture(0)
         if tex_path is not None:
@@ -33,7 +38,7 @@ class Scene:
 
         # Create camera and setup the camera position
         near_range = 0.3
-        far_range = 40
+        far_range = 100
         camera = pv.Camera()
         camera.position = (-5.0, 0.5, -4.5) # Default camera position will change
         camera.clipping_range = (near_range, far_range)
@@ -62,7 +67,7 @@ class Scene:
             pl.ren_win.SetOffScreenRendering(5)
             img = pl.screenshot(transparent_background=True, 
                                 window_size=[self.resolution,int(self.resolution*pl.window_size[1]/pl.window_size[0])])
-            pl.remove_actor(back_mesh)
+            
             # Get the thickness map
             thicc_map = np.zeros((self.resolution*self.resolution))
             for i in range(len(end_ray_pts.points)):
@@ -72,7 +77,7 @@ class Scene:
                 thicc_map[i] = dist(in1, out1) if (not in1 is None) else 0
 
             thicc_map = np.flip(thicc_map.reshape(self.resolution, self.resolution))
-            
+            pl.remove_actor(back_mesh)
             self.frames.append(Frame(img, depth_img, thicc_map, c_pos))
 
 
@@ -148,7 +153,7 @@ class Scene:
         # Y can only be between 2 and 10
         # Z can only be between 2 and 4.5 or -4.5 and -2
         
-        x = random.uniform(2, 5) if random.randint(0, 1) == 0 else random.uniform(-5, -2)
-        y = random.uniform(2, 10)
-        z = random.uniform(2, 4.5) if random.randint(0, 1) == 0 else random.uniform(-4.5, -2)
+        x = random.uniform(1, 3) if random.randint(0, 1) == 0 else random.uniform(-3, -1)
+        y = random.uniform(1, 3)
+        z = random.uniform(1, 3.5) if random.randint(0, 1) == 0 else random.uniform(-3.5, -1)
         return (x, y, z)
