@@ -5,7 +5,7 @@ from src.frame import Frame
 import pyvista as pv
 import numpy as np
 from math import dist
-import tetgen
+# import tetgen
 
 pv.global_theme.background = (135, 206, 235)
 pv.global_theme.smooth_shading = True
@@ -51,7 +51,7 @@ class Scene:
         try:
             obj = pl.add_mesh(obj_mesh, show_edges=self.show_edges, texture=obj_texture)
         except :
-            print("Textures Not Working!")
+            # print("Textures Not Working!")
             obj = pl.add_mesh(obj_mesh, show_edges=self.show_edges)
 
         for x in range(self.no_of_frames):
@@ -80,23 +80,27 @@ class Scene:
             pl.remove_actor(back_mesh)
             self.frames.append(Frame(img, depth_img, thicc_map, c_pos))
 
-
-
-
     def outRayFinder(self, pts):
         if len(pts) == 0:
-            return None, None
-        # Find the first element in pts that is differnt from pts[0] and return that point onelin
-        if len(pts) > 2:
-            points = np.array(pts)
-            # Bug here with the idx bit
-            # print(points.shape)
-            check = np.where(np.isclose(points, points[0], )  != [True, True, True])
-            # print(len(check[0])<2)
-            if len(check[0]) < 2:
                 return None, None
-            idx = check[0][1]
-            return pts[0], pts[idx]
+            # Find the first element in pts that is differnt from pts[0] and return that point onelin
+        if len(pts) > 2:
+            points = pts
+            # Create a unique list of 3d points 
+            points = np.unique(pts, axis=0)
+            # Bug here with the idx bit
+            check = np.where(np.isclose(points, points[0])  != [True, True, True])[0]
+            leng = len(check)
+            if leng < 1:
+                return None, None
+            if leng == 1:
+                idx = check[0]
+            elif leng == 2:
+                idx = check[1]
+            elif leng >= 3:
+                idx = check[round(leng/2)]
+            return pts[0], pts[idx] # This does have some slight issues given a parallel intersection and no easy way of verifying if its an out ray or not so we naively return the last point
+
         elif len(pts) == 2:
             return pts[0], pts[1]
         else:

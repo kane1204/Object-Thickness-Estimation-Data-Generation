@@ -11,7 +11,7 @@ class Stage:
         self.df_cols = ['model_id', 'model_type', 'img', 'depth_map', 'thicc_map', 'cam_pos']
         self.data_frame = pd.DataFrame(columns=self.df_cols)
         
-        self.image_res = 256
+        self.image_res = 128
         self.scenes = []
 
     def generate_scene(self, model):
