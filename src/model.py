@@ -2,12 +2,16 @@ import os
 
 class Model:
     def __init__(self, model_path):
+        added_path = True
+        
+        filename = "model_normalized"
         self.model_path = model_path
         self.model_id = model_path.split("\\")[-1]
         self.model_type = model_path.split("\\")[-2]
-
-        self.obj_path = model_path + "\\model.obj"
-        self.mtl_path = model_path + "\\model.mtl"
+        if added_path:
+            model_path = model_path + "\\models"
+        self.obj_path = model_path + f"\\{filename}.obj"
+        self.mtl_path = model_path + f"\\{filename}.mtl"
         # Append all textures to a list within image folder
         self.textures = []
         # Error handle if no images folder

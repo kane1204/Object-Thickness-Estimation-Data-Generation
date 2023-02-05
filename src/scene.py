@@ -113,9 +113,9 @@ class Scene:
         # print(rnge)
 
         expand = 10
-        height = rnge[2] * 0.05
+        height = rnge[2] * 1.5
         center = np.array(mesh.center)
-        center -= [0, mesh.center[2] + (bounds[3] + (height/3 )) , 0]
+        center -= [0, mesh.center[2] + (bounds[3] + (height)) , 0]
 
         width = rnge[0] * (1 + expand)
         length = rnge[1] * (1 + expand)

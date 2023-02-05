@@ -27,4 +27,10 @@ class ModelLoader:
 
     def get_models(self, catagory):
         return self.model_paths[catagory]
+    
+    def get_all_models(self):
+        models = []
+        for catagory in self.model_paths:
+            models += self.model_paths[catagory]
+        return models
 
