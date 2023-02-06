@@ -157,7 +157,7 @@ class Scene:
         # Y can only be between 2 and 10
         # Z can only be between 2 and 4.5 or -4.5 and -2
         
-        x = random.uniform(1, 3) if random.randint(0, 1) == 0 else random.uniform(-3, -1)
-        y = random.uniform(1, 3)
-        z = random.uniform(1, 3.5) if random.randint(0, 1) == 0 else random.uniform(-3.5, -1)
+        x = random.uniform(1, 2.5) if random.randint(0, 1) == 0 else random.uniform(-2.5, -1)
+        y = random.uniform(1, 2)
+        z = random.uniform(1, 2.5) if random.randint(0, 1) == 0 else random.uniform(-2.5, -1)
         return (x, y, z)
