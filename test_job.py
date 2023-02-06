@@ -13,3 +13,14 @@ subset = models[0:100]
 
 stage = Stage(subset, 3)
 stage.generate_scenes()
+
+# Windows
+# DATA_ROOT_WINDOWS = "data\\shapenet_samples"
+# data = ModelLoader(DATA_ROOT_WINDOWS, False , True)
+# # Create a list of models
+# models = data.get_models("02828884")
+
+# subset = models[0:100]
+
+# stage = Stage(subset, 3)
+# stage.generate_scenes()

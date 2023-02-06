@@ -23,7 +23,7 @@ class Scene:
 
     def generate_frames(self):
         '''Generate a number of frames for the scene'''
-        pv.start_xvfb()
+        # pv.start_xvfb()
         obj_mesh = pv.read(self.model.obj_path)
 
 

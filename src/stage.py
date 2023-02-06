@@ -27,14 +27,23 @@ class Stage:
     def generate_scenes(self):
         '''Generate for each model a scene with a number of frames'''
         print("Start Generating Scenes!")
+        iter = 0
         for model in tqdm.tqdm(self.models):
+            trackerfile = open("tracker.txt", "a")  # append mode
+            trackerfile.write(f"Model: {iter}-{datetime.now()} \n")
+            trackerfile.close()
             self.generate_scene(model)
             # After every so many scenes, update the data frame to a csv file
-            if len(self.data_frame) > 10:
+            if len(self.data_frame) > 1:
+                # Load dataframe from csv and append to it, then save it again
+                if iter>0:
+                    self.data_frame = pd.concat([self.data_frame, pd.read_csv(self.filename)], ignore_index=True)
                 self.data_frame.to_csv(self.filename, index=False)
                 self.data_frame = pd.DataFrame(columns=self.df_cols)
+            iter += 1
 
         print(f"Finished and saving to : {self.filename} !")
+        self.data_frame = pd.concat([self.data_frame, pd.read_csv(self.filename)], ignore_index=True)
         self.data_frame.to_csv(self.filename, index=False)
 
     
