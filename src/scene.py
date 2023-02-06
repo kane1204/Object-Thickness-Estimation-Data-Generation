@@ -23,7 +23,7 @@ class Scene:
 
     def generate_frames(self):
         '''Generate a number of frames for the scene'''
-        
+        pv.start_xvfb()
         obj_mesh = pv.read(self.model.obj_path)
 
 
@@ -41,7 +41,7 @@ class Scene:
         camera.clipping_range = (near_range, far_range)
 
         
-        pl = pv.Plotter(window_size=[self.resolution, self.resolution])
+        pl = pv.Plotter(window_size=[self.resolution, self.resolution],off_screen=True)
         # Assign Camera
         pl.camera = camera
 
@@ -57,7 +57,6 @@ class Scene:
             c_pos = camera.position
             plane = self.createPlaneFromFrustum(camera.view_frustum().copy())
             _, end_ray_pts = self.planeToGrid(plane, self.resolution)
-
             pl.screenshot()
             depth_img = pl.get_image_depth(fill_value=0)
             back_mesh = pl.add_mesh(base_mesh,color='green')

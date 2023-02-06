@@ -26,6 +26,7 @@ class Stage:
 
     def generate_scenes(self):
         '''Generate for each model a scene with a number of frames'''
+        print("Start Generating Scenes!")
         for model in tqdm.tqdm(self.models):
             self.generate_scene(model)
             # After every so many scenes, update the data frame to a csv file
