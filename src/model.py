@@ -1,26 +1,31 @@
 import os
 
 class Model:
-    def __init__(self, model_path):
-        added_path = True
-        
-        filename = "model_normalized"
+    def __init__(self, model_path, added_path, isWindows):
+        added_path = added_path
+        windows= isWindows
+        if windows:
+            split_var = "\\"
+        else:
+            split_var = "/"
+
+        filename = "model"
         self.model_path = model_path
-        self.model_id = model_path.split("\\")[-1]
-        self.model_type = model_path.split("\\")[-2]
+        self.model_id = model_path.split(split_var)[-1]
+        self.model_type = model_path.split(split_var)[-2]
         if added_path:
-            model_path = model_path + "\\models"
-        self.obj_path = model_path + f"\\{filename}.obj"
-        self.mtl_path = model_path + f"\\{filename}.mtl"
+            model_path = model_path + f"{split_var}models"
+        self.obj_path = model_path + f"{split_var}{filename}.obj"
+        self.mtl_path = model_path + f"{split_var}{filename}.mtl"
         # Append all textures to a list within image folder
         self.textures = []
         # Error handle if no images folder
         try:
-            for file in os.listdir(model_path + "\\images"):
+            for file in os.listdir(model_path + f"{split_var}images"):
                 if file.endswith(".jpg"):
-                    self.textures.append(model_path + "\\images\\" + file)
+                    self.textures.append(model_path + f"{split_var}images{split_var}" + file)
                 elif file.endswith(".png"):
-                    self.textures.append(model_path + "\\images\\" + file)
+                    self.textures.append(model_path + f"{split_var}images{split_var}" + file)
         except:
             pass
 

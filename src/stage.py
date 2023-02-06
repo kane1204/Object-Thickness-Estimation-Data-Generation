@@ -1,7 +1,7 @@
 # Create a stage class that handles an generates scenes
 import tqdm
 import pandas as pd
-
+from datetime import datetime
 from src.scene import Scene
 
 class Stage:
@@ -10,9 +10,10 @@ class Stage:
         self.no_of_frames = no_of_frames
         self.df_cols = ['model_id', 'model_type', 'img', 'depth_map', 'thicc_map', 'cam_pos']
         self.data_frame = pd.DataFrame(columns=self.df_cols)
-        
+        now = datetime.now().strftime("%Y%m%d-%H%M%S")
+        self.filename = f"data_{now}.csv"
         self.image_res = 128
-        self.scenes = []
+        # self.scenes = []
 
     def generate_scene(self, model):
         '''Generate a scene with a number of frames and saves frames to the data frame'''
@@ -20,17 +21,20 @@ class Stage:
         scene.generate_frames()
         self.append_to_data_frame(scene)
         # Only append for testing could be memory intensive
-        self.scenes.append(scene)
-        # del scene
+        # self.scenes.append(scene)
+        del scene
 
     def generate_scenes(self):
         '''Generate for each model a scene with a number of frames'''
         for model in tqdm.tqdm(self.models):
             self.generate_scene(model)
             # After every so many scenes, update the data frame to a csv file
-            if len(self.data_frame) > 100:
-                self.data_frame.to_csv('data.csv', index=False)
+            if len(self.data_frame) > 10:
+                self.data_frame.to_csv(self.filename, index=False)
                 self.data_frame = pd.DataFrame(columns=self.df_cols)
+
+        print(f"Finished and saving to : {self.filename} !")
+        self.data_frame.to_csv(self.filename, index=False)
 
     
     def append_to_data_frame(self, scene):

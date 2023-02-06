@@ -10,7 +10,7 @@ from math import dist
 pv.global_theme.background = (135, 206, 235)
 pv.global_theme.smooth_shading = True
 pv.global_theme.anti_aliasing = 'fxaa'
-pv.set_jupyter_backend('pythreejs')
+# pv.set_jupyter_backend('pythreejs')
 
 class Scene:
     def __init__(self, model, no_of_frames, res) -> None:
@@ -26,10 +26,7 @@ class Scene:
         
         obj_mesh = pv.read(self.model.obj_path)
 
-        # tet = tetgen.TetGen(obj_mesh)
-        # tet.tetrahedralize(order=1, mindihedral=20, minratio=1.5)
-        # obj_mesh = tet.mesh
-        # print(self.model)
+
         tex_path = self.model.get_texture(0)
         if tex_path is not None:
             obj_texture = pv.read_texture(tex_path)

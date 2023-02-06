@@ -3,8 +3,10 @@ from tqdm import tqdm
 from src.model import Model 
 import os
 class ModelLoader:
-    def __init__(self, data_root):
+    def __init__(self, data_root, added_path, isWindows):
         self.data_root = data_root
+        self.added_path = added_path
+        self.isWindows = isWindows
         # Map model paths from catagory to model path
         self.model_paths = {}
 
@@ -13,7 +15,7 @@ class ModelLoader:
             model_p = []
             for model in os.listdir(catagory_path):
                 model_path = os.path.join(catagory_path, model)
-                model_p.append(Model(model_path))
+                model_p.append(Model(model_path, self.added_path, self.isWindows))
             self.model_paths[catagory] = model_p
 
     def get_model_paths(self):
