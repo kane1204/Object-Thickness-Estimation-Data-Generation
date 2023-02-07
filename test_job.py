@@ -3,24 +3,29 @@ import numpy as np
 import pyvista as pv
 import matplotlib.pyplot as plt
 from src.stage import Stage
-# Linux
+from sys import platform
 DATA_ROOT_LINUX = "data/shapenet_samples"
-data = ModelLoader(DATA_ROOT_LINUX, False , False)
+DATA_ROOT_WINDOWS = "data\\shapenet_samples"
+isWindows = False
+
+if  platform == "linux":
+    print("On Linux!")
+    # Linux
+    data = ModelLoader(DATA_ROOT_LINUX, False , False)
+
+elif platform == "win32":
+    print("On Windows!")
+    isWindows = True
+    # Windows
+    data = ModelLoader(DATA_ROOT_WINDOWS, False , True)
+else:
+    print("Unknown OS!")
+    exit(1)
+
 # Create a list of models
 models = data.get_models("02828884")
 
-subset = models[0:100]
+subset = models[0:2]
 
-stage = Stage(subset, 3)
+stage = Stage(subset, 1, isWindows)
 stage.generate_scenes()
-
-# Windows
-# DATA_ROOT_WINDOWS = "data\\shapenet_samples"
-# data = ModelLoader(DATA_ROOT_WINDOWS, False , True)
-# # Create a list of models
-# models = data.get_models("02828884")
-
-# subset = models[0:100]
-
-# stage = Stage(subset, 3)
-# stage.generate_scenes()

@@ -10,20 +10,21 @@ from math import dist
 pv.global_theme.background = (135, 206, 235)
 pv.global_theme.smooth_shading = True
 pv.global_theme.anti_aliasing = 'fxaa'
-# pv.set_jupyter_backend('pythreejs')
 
 class Scene:
-    def __init__(self, model, no_of_frames, res) -> None:
+    def __init__(self, model, no_of_frames, res, isWindows) -> None:
         self.model = model
         self.no_of_frames = no_of_frames
         self.frames = []
         self.model_rotation = 180
         self.resolution = res
         self.show_edges = False
+        self.isWindows = isWindows
 
     def generate_frames(self):
         '''Generate a number of frames for the scene'''
-        pv.start_xvfb()
+        if not self.isWindows:
+            pv.start_xvfb()
         obj_mesh = pv.read(self.model.obj_path)
 
 
@@ -63,7 +64,6 @@ class Scene:
             pl.ren_win.SetOffScreenRendering(5)
             img = pl.screenshot(transparent_background=True, 
                                 window_size=[self.resolution,int(self.resolution*pl.window_size[1]/pl.window_size[0])])
-            
             # Get the thickness map
             thicc_map = np.zeros((self.resolution*self.resolution))
             for i in range(len(end_ray_pts.points)):

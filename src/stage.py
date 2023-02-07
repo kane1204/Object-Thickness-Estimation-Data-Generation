@@ -5,19 +5,21 @@ from datetime import datetime
 from src.scene import Scene
 
 class Stage:
-    def __init__(self, models, no_of_frames) -> None:
+    def __init__(self, models, no_of_frames, isWindows) -> None:
         self.models = models
         self.no_of_frames = no_of_frames
         self.df_cols = ['model_id', 'model_type', 'img', 'depth_map', 'thicc_map', 'cam_pos']
-        self.data_frame = pd.DataFrame(columns=self.df_cols)
+        self.df_dict = {'model_id': str, 'model_type': str, 'img': object, 'depth_map': object, 'thicc_map':  object, 'cam_pos': object}
+        self.data_frame = pd.DataFrame(columns=self.df_cols).astype(self.df_dict)
         now = datetime.now().strftime("%Y%m%d-%H%M%S")
-        self.filename = f"data_{now}.csv"
+        self.filename = f"data_{now}.mdf"
         self.image_res = 128
+        self.isWindows = isWindows
         # self.scenes = []
 
     def generate_scene(self, model):
         '''Generate a scene with a number of frames and saves frames to the data frame'''
-        scene = Scene(model, self.no_of_frames, self.image_res)
+        scene = Scene(model, self.no_of_frames, self.image_res, self.isWindows)
         scene.generate_frames()
         self.append_to_data_frame(scene)
         # Only append for testing could be memory intensive
@@ -36,18 +38,16 @@ class Stage:
             # After every so many scenes, update the data frame to a csv file
             if len(self.data_frame) > 1:
                 # Load dataframe from csv and append to it, then save it again
-                if iter>0:
-                    self.data_frame = pd.concat([self.data_frame, pd.read_csv(self.filename)], ignore_index=True)
-                self.data_frame.to_csv(self.filename, index=False)
-                self.data_frame = pd.DataFrame(columns=self.df_cols)
+                
+                self.data_frame.to_hdf(self.filename, key='data', mode='a')  
+                self.data_frame = pd.DataFrame(columns=self.df_cols).astype(self.df_dict)
             iter += 1
 
         print(f"Finished and saving to : {self.filename} !")
-        self.data_frame = pd.concat([self.data_frame, pd.read_csv(self.filename)], ignore_index=True)
-        self.data_frame.to_csv(self.filename, index=False)
+        self.data_frame.to_hdf(self.filename, key='data', mode='a')  
 
     
     def append_to_data_frame(self, scene):
         # frames is a list of frames also add the model name to the data frame
         for frame in scene.frames:
-            self.data_frame = self.data_frame.append({'model_id': scene.model.model_id, 'model_type': scene.model.model_type, 'img': frame.imgs, 'depth_map': frame.depth_maps, 'thicc_map': frame.thicc_maps, 'cam_pos': frame.cam_pos}, ignore_index=True)
+            self.data_frame = self.data_frame.append({'model_id': scene.model.model_id, 'model_type': scene.model.model_type, 'img': frame.imgs.tolist(), 'depth_map': frame.depth_maps.tolist(), 'thicc_map': frame.thicc_maps.tolist(), 'cam_pos': frame.cam_pos}, ignore_index=True)
