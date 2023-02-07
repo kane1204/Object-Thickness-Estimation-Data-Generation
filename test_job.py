@@ -25,7 +25,7 @@ else:
 # Create a list of models
 models = data.get_models("02828884")
 
-subset = models[0:2]
+subset = models[0:75]
 
-stage = Stage(subset, 1, isWindows)
+stage = Stage(subset, 3, isWindows)
 stage.generate_scenes()
