@@ -24,8 +24,8 @@ else:
 
 # Create a list of models
 models = data.get_models("02828884")
-
-subset = models[0:75]
+# https://machinelearningmastery.com/how-to-save-a-numpy-array-to-file-for-machine-learning/ do this
+subset = models[0:100]
 
 stage = Stage(subset, 3, isWindows)
 stage.generate_scenes()

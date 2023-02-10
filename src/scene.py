@@ -1,10 +1,14 @@
 #  Create a scene class that has a model and a list of samples
+import os
 import random
 from src.model import Model
 from src.frame import Frame
 import pyvista as pv
 import numpy as np
 from math import dist
+import matplotlib.image
+
+
 # import tetgen
 
 pv.global_theme.background = (135, 206, 235)
@@ -12,7 +16,7 @@ pv.global_theme.smooth_shading = True
 pv.global_theme.anti_aliasing = 'fxaa'
 
 class Scene:
-    def __init__(self, model, no_of_frames, res, isWindows) -> None:
+    def __init__(self, model, no_of_frames, res, isWindows, model_folder) -> None:
         self.model = model
         self.no_of_frames = no_of_frames
         self.frames = []
@@ -20,6 +24,7 @@ class Scene:
         self.resolution = res
         self.show_edges = False
         self.isWindows = isWindows
+        self.model_folder = model_folder
 
     def generate_frames(self):
         '''Generate a number of frames for the scene'''
@@ -62,7 +67,7 @@ class Scene:
             depth_img = pl.get_image_depth(fill_value=0)
             back_mesh = pl.add_mesh(base_mesh,color='green')
             pl.ren_win.SetOffScreenRendering(5)
-            img = pl.screenshot(transparent_background=True, 
+            img = pl.screenshot(transparent_background=False, 
                                 window_size=[self.resolution,int(self.resolution*pl.window_size[1]/pl.window_size[0])])
             # Get the thickness map
             thicc_map = np.zeros((self.resolution*self.resolution))
@@ -74,7 +79,27 @@ class Scene:
 
             thicc_map = np.flip(thicc_map.reshape(self.resolution, self.resolution))
             pl.remove_actor(back_mesh)
-            self.frames.append(Frame(img, depth_img, thicc_map, c_pos))
+
+            self.saveFrame(x, Frame(img, depth_img, thicc_map, c_pos))
+        
+    
+    def saveFrame(self,frameno, frame):
+        """Save frame to folder using numpy and images"""
+        img = frame.img
+        depth_img = frame.depth_map
+        thicc_map = frame.thicc_map
+        c_pos = frame.cam_pos
+        frame_path = os.path.join(self.model_folder, f'frame_{frameno}')
+        os.makedirs(frame_path, exist_ok=True)
+
+        matplotlib.image.imsave(os.path.join(frame_path, 'img.png'), img)
+
+        np.save(os.path.join(frame_path, 'depth_map.npy'), depth_img)
+        np.save(os.path.join(frame_path, 'thicc_map.npy'), thicc_map)
+        np.save(os.path.join(frame_path, 'cam_pos.npy'), c_pos)
+
+
+        
 
     def outRayFinder(self, pts):
         if len(pts) == 0:

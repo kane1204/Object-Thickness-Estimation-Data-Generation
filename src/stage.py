@@ -3,6 +3,7 @@ import tqdm
 import pandas as pd
 from datetime import datetime
 from src.scene import Scene
+import os
 
 class Stage:
     def __init__(self, models, no_of_frames, isWindows) -> None:
@@ -12,16 +13,18 @@ class Stage:
         self.df_dict = {'model_id': str, 'model_type': str, 'img': object, 'depth_map': object, 'thicc_map':  object, 'cam_pos': object}
         self.data_frame = pd.DataFrame(columns=self.df_cols).astype(self.df_dict)
         now = datetime.now().strftime("%Y%m%d-%H%M%S")
-        self.filename = f"data_{now}.mdf"
+        self.root_folder = f"gen_data_{now}"
         self.image_res = 128
         self.isWindows = isWindows
         # self.scenes = []
+        print(f"Creating root folder: {self.root_folder}/")
+        os.mkdir(self.root_folder)
 
-    def generate_scene(self, model):
+    def generate_scene(self, model, model_folder):
         '''Generate a scene with a number of frames and saves frames to the data frame'''
-        scene = Scene(model, self.no_of_frames, self.image_res, self.isWindows)
+        scene = Scene(model, self.no_of_frames, self.image_res, self.isWindows, model_folder)
         scene.generate_frames()
-        self.append_to_data_frame(scene)
+        # self.append_to_data_frame(scene)
         # Only append for testing could be memory intensive
         # self.scenes.append(scene)
         del scene
@@ -31,21 +34,17 @@ class Stage:
         print("Start Generating Scenes!")
         iter = 0
         for model in tqdm.tqdm(self.models):
-            trackerfile = open("tracker.txt", "a")  # append mode
+            trackerfile = open(os.path.join(self.root_folder,"tracker.txt"), "a")  # append mode
             trackerfile.write(f"Model: {iter}-{datetime.now()} \n")
             trackerfile.close()
-            self.generate_scene(model)
-            # After every so many scenes, update the data frame to a csv file
-            if len(self.data_frame) > 1:
-                # Load dataframe from csv and append to it, then save it again
-                
-                self.data_frame.to_hdf(self.filename, key='data', mode='a')  
-                self.data_frame = pd.DataFrame(columns=self.df_cols).astype(self.df_dict)
+            # Create Directory Structure
+            model_folder = os.path.join(self.root_folder, model.model_type,model.model_id)
+            os.makedirs(model_folder, exist_ok=True)
+
+            self.generate_scene(model, model_folder)
             iter += 1
 
-        print(f"Finished and saving to : {self.filename} !")
-        self.data_frame.to_hdf(self.filename, key='data', mode='a')  
-
+        print(f"Finished and saved to : {self.root_folder} !")
     
     def append_to_data_frame(self, scene):
         # frames is a list of frames also add the model name to the data frame
