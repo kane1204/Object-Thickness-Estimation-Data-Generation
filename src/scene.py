@@ -7,7 +7,7 @@ import pyvista as pv
 import numpy as np
 from math import dist
 import matplotlib.image
-
+import os.path
 
 # import tetgen
 
@@ -28,11 +28,17 @@ class Scene:
 
     def generate_frames(self):
         '''Generate a number of frames for the scene'''
+        # Check model exists and if not skip
+        if not os.path.exists(self.model.obj_path):
+            trackerfile = open(os.path.join(self.root_folder,"tracker.txt"), "a")  # append mode
+            trackerfile.write(f"Model skipped! ID={self.model.model_id} catagory={self.model.model_type}\n")
+            trackerfile.close()
+            return
+
         if not self.isWindows:
             pv.start_xvfb()
+        
         obj_mesh = pv.read(self.model.obj_path)
-
-
         tex_path = self.model.get_texture(0)
         if tex_path is not None:
             obj_texture = pv.read_texture(tex_path)
