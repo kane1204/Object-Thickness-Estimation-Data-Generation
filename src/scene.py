@@ -16,7 +16,7 @@ pv.global_theme.smooth_shading = True
 pv.global_theme.anti_aliasing = 'fxaa'
 
 class Scene:
-    def __init__(self, model, no_of_frames, res, isWindows, model_folder) -> None:
+    def __init__(self, model, no_of_frames, res, isWindows, model_folder,root_folder) -> None:
         self.model = model
         self.no_of_frames = no_of_frames
         self.frames = []
@@ -25,6 +25,7 @@ class Scene:
         self.show_edges = False
         self.isWindows = isWindows
         self.model_folder = model_folder
+        self.root_folder = root_folder
 
     def generate_frames(self):
         '''Generate a number of frames for the scene'''

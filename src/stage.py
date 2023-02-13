@@ -22,7 +22,7 @@ class Stage:
 
     def generate_scene(self, model, model_folder):
         '''Generate a scene with a number of frames and saves frames to the data frame'''
-        scene = Scene(model, self.no_of_frames, self.image_res, self.isWindows, model_folder)
+        scene = Scene(model, self.no_of_frames, self.image_res, self.isWindows, model_folder, self.root_folder)
         scene.generate_frames()
         # self.append_to_data_frame(scene)
         # Only append for testing could be memory intensive
