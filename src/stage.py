@@ -33,16 +33,20 @@ class Stage:
         '''Generate for each model a scene with a number of frames'''
         print("Start Generating Scenes!")
         iter = 0
-        for model in tqdm.tqdm(self.models):
-            trackerfile = open(os.path.join(self.root_folder,"tracker.txt"), "a")  # append mode
-            trackerfile.write(f"Model: {iter}-{datetime.now()} \n")
-            trackerfile.close()
-            # Create Directory Structure
-            model_folder = os.path.join(self.root_folder, model.model_type,model.model_id)
-            os.makedirs(model_folder, exist_ok=True)
+        with tqdm.tqdm(self.models) as t:
+            for model in t:
+                rate = t.format_dict["rate"]
+                remaining = (t.total - t.n) if rate and t.total else 0
+            # for model in tqdm.tqdm(self.models):
+                trackerfile = open(os.path.join(self.root_folder,"tracker.txt"), "a")  # append mode
+                trackerfile.write(f"Model: {iter}-{datetime.now()}, Samples Remaining: {remaining}, \n")
+                trackerfile.close()
+                # Create Directory Structure
+                model_folder = os.path.join(self.root_folder, model.model_type,model.model_id)
+                os.makedirs(model_folder, exist_ok=True)
 
-            self.generate_scene(model, model_folder)
-            iter += 1
+                self.generate_scene(model, model_folder)
+                iter += 1
 
         print(f"Finished and saved to : {self.root_folder} !")
     

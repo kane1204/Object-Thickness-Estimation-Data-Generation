@@ -9,7 +9,7 @@ class Model:
         else:
             split_var = "/"
 
-        filename = "model"
+        filename = "model_normalized"
         self.model_path = model_path
         self.model_id = model_path.split(split_var)[-1]
         self.model_type = model_path.split(split_var)[-2]
