@@ -8,7 +8,7 @@ import numpy as np
 from math import dist
 import matplotlib.image
 import os.path
-
+KILL_DISPLAY =True
 # import tetgen
 
 pv.global_theme.background = (135, 206, 235)
@@ -86,7 +86,7 @@ class Scene:
 
             thicc_map = np.flip(thicc_map.reshape(self.resolution, self.resolution))
             pl.remove_actor(back_mesh)
-
+            pl.close()
             self.saveFrame(x, Frame(img, depth_img, thicc_map, c_pos))
         
     
