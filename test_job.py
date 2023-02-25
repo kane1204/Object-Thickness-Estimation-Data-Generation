@@ -27,7 +27,7 @@ else:
 # Create a list of models
 models = data.get_all_models()
 # https://machinelearningmastery.com/how-to-save-a-numpy-array-to-file-for-machine-learning/ do this
-subset = models[1534:-1]
+subset = models[1745:-1]
 
 stage = Stage(subset, 3, isWindows)
 try:

@@ -86,9 +86,8 @@ class Scene:
 
             thicc_map = np.flip(thicc_map.reshape(self.resolution, self.resolution))
             pl.remove_actor(back_mesh)
-            pl.close()
             self.saveFrame(x, Frame(img, depth_img, thicc_map, c_pos))
-        
+        pl.close()
     
     def saveFrame(self,frameno, frame):
         """Save frame to folder using numpy and images"""
