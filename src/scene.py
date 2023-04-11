@@ -126,7 +126,7 @@ class Scene:
                 idx = check[1]
             elif leng >= 3:
                 idx = check[round(leng/2)]
-            return pts[0], pts[idx] # This does have some slight issues given a parallel intersection and no easy way of verifying if its an out ray or not so we naively return the last point
+            return pts[0], pts[-1] # This does have some slight issues given a parallel intersection and no easy way of verifying if its an out ray or not so we naively return the last point
 
         elif len(pts) == 2:
             return pts[0], pts[1]
