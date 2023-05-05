@@ -1,4 +1,5 @@
 # ote-shapenet-gen
-## Setup
-### Requirements
-- Mainly Pyvista
+Python tool that is able to generate synthetic thickness & depth data from 3D Models (Like ShapeNet). This is part of my masters part 2 project.
+
+## Abstract
+In this project, we investigate a novel task related to understanding 3D scenes from single images, called object thickness estimation. Our primary objective was to create a neural network capable of predicting the thickness of an object. Due to the lack of data for this task, we had to develop a repeatable method for creating bespoke synthetic datasets for training, validation, and testing. This provides insights into the challenges associated with generating synthetic data. We trained an adapted U-Net model to predict the thickness of a single object in an image and evaluated its performance against a test set. We also conducted multiple experiments, one of which offered more insight into the dependence on context of objects when performing this task. Furthermore, we compared the performance of human estimators to the fully trained U-Net model by quizzing them on relative thickness questions. The model showed promise quantitatively, performing better in every way compared to the baseline and exhibiting strong performance against human estimators.
