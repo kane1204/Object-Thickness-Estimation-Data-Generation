@@ -1,4 +1,4 @@
-# ote-shapenet-gen
+# Object-Thickness-Estimation-Data Generation
 Python tool that is able to generate synthetic thickness & depth data from 3D Models (Like ShapeNet). This is part of my masters part 2 project.
 
 ## Abstract
